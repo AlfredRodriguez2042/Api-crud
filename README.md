@@ -27,6 +27,7 @@ This API made in node with Postgres using sequelize (orm) and sequelize-cli
     The BelongsToMany association
 
 Model
+
 src
 ├── config
 │ ├── index.js
@@ -54,8 +55,7 @@ src
 │ ├── index.js
 │ └── user.js
 └── server.js
-
-## Getting started
+<br>
 
 ## Commands
 
