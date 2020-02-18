@@ -1,6 +1,8 @@
 <h1 align="center">
 <br>
-  a simple crud app
+
+## API CMS
+
 <br>
 <br>
 
@@ -28,33 +30,34 @@ This API made in node with Postgres using sequelize (orm) and sequelize-cli
 
 ## Model Structure
 
-      src
-      ├── config
-      │ ├── index.js
-      │ └── sequelizeconfig.js
-      ├── controllers
-      │ ├── articleController.js
-      │ ├── commentController.js
-      │ └── userController.js
-      ├── database
-      │ └── migrations
-      │ └── 20200211043305-create-users.js
-      ├── index.js
-      ├── models
-      │ ├── article.js
-      │ ├── categoryGroup.js
-      │ ├── category.js
-      │ ├── comment.js
-      │ ├── index.js
-      │ ├── reply.js
-      │ ├── tag.js
-      │ └── user.js
-      ├── routes
-      │ ├── article.js
-      │ ├── comment.js
-      │ ├── index.js
-      │ └── user.js
-      └── server.js
+        src
+        ├── config
+        │   ├── index.js
+        │   └── sequelizeconfig.js
+        ├── controllers
+        │   ├── articleController.js
+        │   ├── commentController.js
+        │   └── userController.js
+        ├── index.js
+        ├── migrations
+        │   └── 20200211043305-create-users.js
+        ├── models
+        │   ├── article.js
+        │   ├── categoryGroup.js
+        │   ├── category.js
+        │   ├── comment.js
+        │   ├── index.js
+        │   ├── reply.js
+        │   ├── role.js
+        │   ├── tag.js
+        │   ├── user.js
+        │   └── userRole.js
+        ├── routes
+        │   ├── article.js
+        │   ├── comment.js
+        │   ├── index.js
+        │   └── user.js
+        └── server.js
 
 <br>
 
