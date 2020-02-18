@@ -1,10 +1,9 @@
-import models from '../models'
-const { Comment } = models
+import Comment from '../models/comment'
 
 export const Index = async (req, res) => {
   try {
     const comment = await Comment.findAll()
-    console.log(comment)
+
     if (comment.length) {
       res.status(200).json({ comment })
     } else {
@@ -16,7 +15,6 @@ export const Index = async (req, res) => {
 }
 
 export const Show = async (req, res) => {
-  console.log('comentID', req.params)
   try {
     const comment = await Comment.findByPk(req.params.id, {
       attributes: { exclude: ['updatedAt', 'user_id', 'article_id'] }
@@ -41,10 +39,10 @@ export const Create = async (req, res) => {
 
 export const Update = async (req, res) => {
   try {
-    const comment = await Comment.findOne(req.params.id)
-    const newComment = Object.assign(comment, req.body)
+    const response = await Comment.findOne(req.params.id)
+    const comment = Object.assign(response, req.body)
     await newComment.save()
-    res.status(200).json({ message: 'UPDATE', newUser })
+    res.status(200).json({ message: 'UPDATE', comment })
   } catch (err) {
     res.status(500).send(err)
   }

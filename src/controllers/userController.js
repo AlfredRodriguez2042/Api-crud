@@ -1,6 +1,6 @@
-import models from '../models'
-
-const { User } = models
+import User from '../models/user'
+import Role from '../models/role'
+import user_role from '../models/userRole'
 
 export const Index = async (req, res) => {
   try {
@@ -8,10 +8,16 @@ export const Index = async (req, res) => {
       include: [
         {
           association: 'articles'
+        },
+        {
+          association: 'roles',
+          attributes: ['name'],
+          through: { attributes: [] }
         }
       ]
     })
-    console.log(users)
+    req.user = users
+
     if (users.length) {
       res.status(200).json({ users })
     } else {
@@ -20,6 +26,7 @@ export const Index = async (req, res) => {
         .json({ message: 'NO CONTENT' })
         .send('no user')
     }
+    console.log(JSON.parse(users))
   } catch (error) {
     res.status(500).json(error)
   }
@@ -27,17 +34,33 @@ export const Index = async (req, res) => {
 
 export const Show = async (req, res) => {
   try {
-    const oneUser = await User.findOne(req.params.id)
-    res.status(200).json({ oneUser })
+    const user = await User.findByPk(req.params.id, {
+      include: [
+        {
+          association: 'roles',
+          attributes: ['name'],
+          through: { attributes: [] }
+        }
+      ]
+    })
+    res.status(200).json({ user })
+    const rol = user.toJSON()
+    console.log(rol.roles[0].name)
   } catch (err) {
     res.status(500).send(err)
   }
 }
 
 export const Create = async (req, res) => {
-  console.log(req.body)
+  const { roles, ...data } = req.body
+
+  const [role, created] = await Role.findOrCreate({
+    where: { name: roles }
+  })
+
   try {
-    await User.create(req.body)
+    const user = await User.create(data)
+    user.addRole(role)
     res.status(201).json({ message: 'Created succesfuly' })
   } catch (error) {
     res.status(500).json(error)

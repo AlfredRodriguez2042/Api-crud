@@ -1,7 +1,7 @@
 import { Model, DataTypes } from 'sequelize'
 const { UUID, UUIDV4, TEXT } = DataTypes
 
-class Category_Group extends Model {
+class user_role extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -18,4 +18,4 @@ class Category_Group extends Model {
   }
 }
 
-export default Category_Group
+export default user_role

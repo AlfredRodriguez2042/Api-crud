@@ -1,5 +1,6 @@
-import models from '../models'
-const { Article } = models
+import Category from '../models/category'
+
+import Article from '../models/article'
 
 export const Index = async (req, res) => {
   try {
@@ -24,6 +25,7 @@ export const Index = async (req, res) => {
       res.status(204).json({ message: 'NO CONTENT' })
     }
   } catch (error) {
+    console.log(error)
     res.status(500).json(error)
   }
 }
@@ -51,32 +53,24 @@ export const Show = async (req, res) => {
 }
 
 export const Create = async (req, res) => {
-  const { title, content, userId, tags } = req.body
-  const categories = req.body.categories
-  const [category, created] = await models.Category.findOrCreate({
+  const { categories, ...data } = req.body
+  // console.log('category' + categories)
+  const [category, created] = await Category.findOrCreate({
     where: { name: categories }
   })
-  console.log('categori', category)
+  // console.log('categori', category)
   try {
-    const article = await Article.create(
-      {
-        title,
-        content,
-        userId,
-        tags
-      },
-      {
-        include: [
-          {
-            association: 'tags'
-          }
-        ]
-      }
-    )
+    const article = await Article.create(data, {
+      include: [
+        {
+          association: 'tags'
+        }
+      ]
+    })
     await article.addCategory(category)
-
     res.status(201).json({ message: 'Created successfully' })
   } catch (error) {
+    console.log('Errro: ' + error)
     res.status(500).json(error)
   }
 }

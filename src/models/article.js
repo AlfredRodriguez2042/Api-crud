@@ -1,33 +1,41 @@
-module.exports = (
-  sequelize,
-  { UUID, STRING, BOOLEAN, TEXT, DATE, NOW, TINYINT, UUIDV4, INTEGER }
-) => {
-  const Article = sequelize.define('Article', {
-    id: {
-      type: UUID,
-      primaryKey: true,
-      defaultValue: UUIDV4()
-    },
-    title: {
-      type: STRING,
-      allowNull: false,
-      unique: true
-    },
-    content: {
-      type: TEXT,
-      allowNull: false
-    },
-    viewCount: {
-      type: INTEGER,
-      defaultValue: 0
-    }
-  })
-  Article.associate = models => {
-    Article.belongsTo(models.User, {
+import { Model, DataTypes } from 'sequelize'
+const { UUID, UUIDV4, STRING, TEXT, INTEGER } = DataTypes
+
+class Article extends Model {
+  static init(sequelize) {
+    super.init(
+      {
+        id: {
+          type: UUID,
+          primaryKey: true,
+          defaultValue: UUIDV4()
+        },
+        title: {
+          type: STRING,
+          allowNull: false,
+          unique: true
+        },
+        content: {
+          type: TEXT,
+          allowNull: false
+        },
+        viewCount: {
+          type: INTEGER,
+          defaultValue: 0
+        }
+      },
+      {
+        sequelize
+      }
+    )
+  }
+
+  static associate(models) {
+    this.belongsTo(models.User, {
       foreignKey: 'user_id',
       as: 'user'
     })
-    Article.hasMany(models.Tag, {
+    this.hasMany(models.Tag, {
       foreignKey: {
         name: 'articleId',
         field: 'article_id'
@@ -35,7 +43,7 @@ module.exports = (
       as: 'tags',
       onUpdate: 'CASCADE'
     })
-    Article.belongsToMany(models.Category, {
+    this.belongsToMany(models.Category, {
       foreignKey: {
         name: 'articleId',
         field: 'article_id'
@@ -44,14 +52,14 @@ module.exports = (
       as: 'categories',
       onUpdate: 'CASCADE'
     })
-    Article.hasMany(models.Comment, {
+    this.hasMany(models.Comment, {
       foreignKey: {
         name: 'articleId',
         field: 'article_id'
       },
       as: 'comments'
     })
-    Article.hasMany(models.Reply, {
+    this.hasMany(models.Reply, {
       foreignKey: {
         name: 'articleId',
         field: 'article_id'
@@ -59,5 +67,5 @@ module.exports = (
       as: 'replies'
     })
   }
-  return Article
 }
+export default Article

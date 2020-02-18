@@ -1,7 +1,7 @@
 import { Model, DataTypes } from 'sequelize'
-const { UUID, UUIDV4, STRING } = DataTypes
+const { UUID, UUIDV4, ENUM, STRING } = DataTypes
 
-class Category extends Model {
+class Role extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -11,8 +11,10 @@ class Category extends Model {
           defaultValue: UUIDV4()
         },
         name: {
-          type: STRING,
-          allowNull: false
+          type: ENUM,
+          values: ['user', 'admin', 'disabled'],
+          allowNull: false,
+          defaultValue: 'user'
         }
       },
       {
@@ -21,16 +23,16 @@ class Category extends Model {
     )
   }
   static associate(models) {
-    this.belongsToMany(models.Article, {
+    this.belongsToMany(models.User, {
       foreignKey: {
-        name: 'categoryId',
-        field: 'category_id'
+        name: 'roleId',
+        field: 'role_id'
       },
-      through: 'Category_Group',
-      as: 'articles',
+
+      through: 'user_role',
+      as: 'user',
       onUpdate: 'CASCADE'
     })
   }
 }
-
-export default Category
+export default Role

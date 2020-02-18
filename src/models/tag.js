@@ -1,20 +1,27 @@
-export default (
-  sequelize,
-  { UUID, STRING, BOOLEAN, TEXT, DATE, NOW, UUIDV4 }
-) => {
-  const Tag = sequelize.define('Tag', {
-    id: {
-      type: UUID,
-      defaultValue: UUIDV4,
-      primaryKey: true
-    },
-    name: {
-      type: STRING,
-      allowNull: false
-    }
-  })
-  Tag.associate = models => {
-    Tag.belongsTo(models.Article)
+import { Model, DataTypes } from 'sequelize'
+const { UUID, UUIDV4, STRING, TEXT, INTEGER, ENUM } = DataTypes
+
+class Tag extends Model {
+  static init(sequelize) {
+    super.init(
+      {
+        id: {
+          type: UUID,
+          defaultValue: UUIDV4,
+          primaryKey: true
+        },
+        name: {
+          type: STRING,
+          allowNull: false
+        }
+      },
+      {
+        sequelize
+      }
+    )
   }
-  return Tag
+  static associate(models) {
+    this.belongsTo(models.Article)
+  }
 }
+export default Tag
