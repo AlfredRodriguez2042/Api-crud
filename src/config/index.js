@@ -4,17 +4,17 @@ module.exports = {
     username: 'postgres',
     password: 'postgres',
     options: {
-      host: 'localhost',
+      host: process.env.POSTGRES_HOST || 'localhost',
       dialect: 'postgres',
       pool: {
         max: 5,
-        min: 0
+        min: 0,
       },
       define: {
         underscored: true,
-        timestamps: true
+        timestamps: true,
       },
-      logging: false
-    }
-  }
+      logging: false,
+    },
+  },
 }

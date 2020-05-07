@@ -7,24 +7,21 @@ export const Index = async (req, res) => {
     const users = await User.findAll({
       include: [
         {
-          association: 'articles'
+          association: 'articles',
         },
         {
           association: 'roles',
           attributes: ['name'],
-          through: { attributes: [] }
-        }
-      ]
+          through: { attributes: [] },
+        },
+      ],
     })
     req.user = users
 
     if (users.length) {
       res.status(200).json({ users })
     } else {
-      res
-        .status(204)
-        .json({ message: 'NO CONTENT' })
-        .send('no user')
+      res.status(204).json({ message: 'NO CONTENT' }).send('no user')
     }
     console.log(JSON.parse(users))
   } catch (error) {
@@ -39,9 +36,9 @@ export const Show = async (req, res) => {
         {
           association: 'roles',
           attributes: ['name'],
-          through: { attributes: [] }
-        }
-      ]
+          through: { attributes: [] },
+        },
+      ],
     })
     res.status(200).json({ user })
     const rol = user.toJSON()
@@ -55,7 +52,7 @@ export const Create = async (req, res) => {
   const { roles, ...data } = req.body
 
   const [role, created] = await Role.findOrCreate({
-    where: { name: roles }
+    where: { name: roles },
   })
 
   try {

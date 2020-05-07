@@ -8,16 +8,16 @@ export const Index = async (req, res) => {
       include: [
         {
           association: 'tags',
-          attributes: ['name']
+          attributes: ['name'],
         },
         {
           association: 'categories',
           attributes: ['name'],
-          through: { attributes: [] }
-        }
+          through: { attributes: [] },
+        },
       ],
       attributes: { exclude: ['updatedAt', 'user_id'] },
-      order: [['createdAt', 'DESC']]
+      order: [['createdAt', 'DESC']],
     })
     if (article.length) {
       res.status(200).json({ article })
@@ -34,15 +34,15 @@ export const Show = async (req, res) => {
   try {
     const article = await Article.findByPk(req.params.id, {
       include: [{ association: 'comments' }],
-      attributes: { exclude: ['user_id'] }
+      attributes: { exclude: ['user_id'] },
     })
 
     await Article.update(
       {
-        viewCount: models.sequelize.literal('view_count +1')
+        viewCount: models.sequelize.literal('view_count +1'),
       },
       {
-        where: req.params
+        where: req.params,
       }
     )
     res.status(200).json({ article })
@@ -56,16 +56,16 @@ export const Create = async (req, res) => {
   const { categories, ...data } = req.body
   // console.log('category' + categories)
   const [category, created] = await Category.findOrCreate({
-    where: { name: categories }
+    where: { name: categories },
   })
   // console.log('categori', category)
   try {
     const article = await Article.create(data, {
       include: [
         {
-          association: 'tags'
-        }
-      ]
+          association: 'tags',
+        },
+      ],
     })
     await article.addCategory(category)
     res.status(201).json({ message: 'Created successfully' })
@@ -78,7 +78,7 @@ export const Create = async (req, res) => {
 export const Update = async (req, res) => {
   try {
     const article = await Article.update(req.body, {
-      where: req.params
+      where: req.params,
     })
     res.status(200).json({ message: 'Updated successfully', article })
   } catch (err) {
